@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>event-emit</title>
+</head>
+<body>
+  <div id="app">
+    <app-header v-on:pass="logText"></app-header>
+    <app-content :props-number="num" @increase-number="increaseNumber"></app-content>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const appHeader = {
+      template: '<button v-on:click="passEvent">Click Me</button>',
+      methods: {
+        passEvent() {
+          this.$emit('pass');
+        }
+      },
+    }
+
+    const appContent = {
+      template: `<div>
+        <button @click="addNumber">add</button>
+        <p>{{ propsNumber }}</p>
+      </div>`,
+      props: ['propsNumber'],
+      methods: {
+        addNumber() {
+          this.$emit('increase-number');
+        }
+      },
+    }
+
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        num: 10
+      },
+      components: {
+        appHeader,
+        appContent
+      },
+      methods: {
+        logText() {
+          console.log(this.num);
+        },
+        increaseNumber() {
+          this.num += 1
+        }
+      },
+    })
+  </script>
+</body>
+</html>
